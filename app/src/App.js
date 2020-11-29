@@ -15,19 +15,37 @@ const Box = styled.div`
 `
 
 function App() {
-  const [countries, setCountries] = useState();
+  const [countries, setCountries] = useState([])
+  const [search, setSearch] = useState()
+  const [input, setInput] = useState()
+
   useEffect(() => {
     axios.get('https://restcountries.eu/rest/v2/all')
     .then(res => {
       setCountries(res.data)
     })
   }, []);
+
+  const handleInput = e => {
+    e.preventDefault()
+    setInput(e.target.value)
+    setSearch(filteredCountries)
+  }
+
+  const filteredCountries = 
+    countries.filter(country => {
+      return country.name.toLowerCase().includes(input)
+    })
+
   return (
     <div>
-      <h1 style={{marginLeft: '3.5%'}}>Where in the world?</h1>
+      <div style={{marginLeft: '3.5%'}}>
+        <h1>Where in the world?</h1>
+        <input placeholder="Search" type="text" value={input} onChange={handleInput}/>
+      </div>
       <Container>
       {console.log(countries)}
-      {countries ? countries.map(item => {
+      {search ? search.map(item => {
         return(
           <Box key={item.name}>
             <img src={item.flag} style={{height: 'auto', width: '100%'}}/>
@@ -38,7 +56,18 @@ function App() {
             </div>
           </Box>
         )
-      }): <div>Loading</div>}
+      }): countries.map(item => {
+        return(
+          <Box key={item.name}>
+            <img src={item.flag} style={{height: 'auto', width: '100%'}}/>
+            <div>
+              <h1>{item.name}</h1>
+              <p>Population: {item.population}</p>
+              <p>Region: {item.region}</p>
+            </div>
+          </Box>
+        )
+      })}
       </Container>
     </div>
   );
