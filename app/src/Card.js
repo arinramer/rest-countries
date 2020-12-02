@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import {Link} from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -12,14 +13,19 @@ const Box = styled.div`
   border: 1px solid black;
   margin: 20px;
   height: auto;
-  width: 300px;
+  width: 400px;
 `
 
 function Card(props) {
+    const borders = {}
+    props.countries.map(country => {
+        borders[country.alpha3Code] = country.name
+    })
     const backButton = (e) => {
         e.preventDefault()
         props.history.push('/')
     }
+
     return(
         props.countries.map(item => {
             if(props.match.params.id === item.alpha3Code) {
@@ -41,6 +47,9 @@ function Card(props) {
                                 })}</div>
                                 <div><h3>Currencies:</h3> {item.currencies.map((currency) => {
                                     return <p>{currency.name}</p>
+                                })}</div>
+                                <div style={{marginBottom: "3%"}}><h3>Bordering nations:</h3> {item.borders.map((country) => {
+                                    return <Link to={`/country/${country}`}><button style={{padding: "2%", margin: "1%"}}>{borders[country]}</button></Link>
                                 })}</div>
                             </div>
                         </Box>
