@@ -19,7 +19,7 @@ const Box = styled.div`
 function Card(props) {
     const borders = {}
     props.countries.map(country => {
-        borders[country.alpha3Code] = country.name
+        return borders[country.alpha3Code] = country.name
     })
     const backButton = (e) => {
         e.preventDefault()
@@ -56,6 +56,9 @@ function Card(props) {
                     </Container>
                     </>
                 )
+            }
+            else {
+                return null
             }
         })
     )
